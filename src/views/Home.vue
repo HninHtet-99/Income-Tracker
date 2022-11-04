@@ -1,6 +1,12 @@
 <template>
-  <div class="container">
-    <TopNav></TopNav>
+  <div>
+    <section class="topNav">
+      <h2>Income Tracker</h2>
+      <h3>$0</h3>
+    </section>
+    <div class="container">
+      <TopNav></TopNav>
+    </div>
   </div>
 </template>
 
