@@ -4,38 +4,53 @@
             <input type="date" v-model="incomeDate">
             <input type="text" placeholder="Income Description" v-model="incomeDes">
             <input type="number" placeholder="Income Value" v-model="incomeValue" @keyup="save">
-            
-            <button class="btn" type="submit">Add</button>
+            <button class="btn" @click="add">Add</button>
         </div>
-        <div class="lists">
-            <h3>{{incomeDes}}</h3>
-            <p>{{incomeValue}}</p>
-            <p>{{incomeDate}}</p>
+        <div v-for="post in posts" :key="post.id">
+            <SinglePost :post="post"></SinglePost>
         </div>
+        
     </div>
 
 </template>
 
 <script>
+import SinglePost from './SinglePost'
 export default {
+  components: { SinglePost },
     data(){
         return{
             incomeDes:'',
             incomeValue: '',
-            incomeDate: ''
+            incomeDate: '',
+            posts:[]
         }
+    },
+    mounted(){
+        fetch("http://localhost:3000/posts")
+        .then((response)=>{
+            return response.json();
+        })
+        .then((datas)=>{
+            this.posts = datas;
+        })
+        .catch((err)=>{
+            console.log(err.message);
+        })
     },
     methods:{
         save(e){
             if (e.keyCode == 13) {
-                if (this.incomeDate==' ' && this.incomeDes===''&& this.incomeValue==='') {
+                this.add();
+            }
+        },
+        add(){
+            if (this.incomeDes===''&& this.incomeValue==='') {
                     alert('please check again!')
                 }
                 else{
                     console.log(this.incomeDes,this.incomeValue,this.incomeDate);
                 }
-                
-            }
         }
     }
 
