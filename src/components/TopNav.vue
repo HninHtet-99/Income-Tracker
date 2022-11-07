@@ -7,7 +7,7 @@
             <button class="btn" @click="add">Add</button>
         </div>
         <div v-for="post in posts" :key="post.id">
-            <SinglePost :post="post"></SinglePost>
+            <SinglePost :post="post" @delete="deletePostList"></SinglePost>
         </div>
         
     </div>
@@ -26,19 +26,14 @@ export default {
             posts:[]
         }
     },
-    mounted(){
-        fetch("http://localhost:3000/posts")
-        .then((response)=>{
-            return response.json();
-        })
-        .then((datas)=>{
-            this.posts = datas;
-        })
-        .catch((err)=>{
-            console.log(err.message);
-        })
-    },
     methods:{
+        /* delete income */
+        deletePostList(id){
+            this.posts = this.posts.filter((post)=>{
+                return post.id != id;
+            })
+        },
+        /* add income */
         save(e){
             if (e.keyCode == 13) {
                 this.add();
@@ -49,9 +44,44 @@ export default {
                     alert('please check again!')
                 }
                 else{
-                    console.log(this.incomeDes,this.incomeValue,this.incomeDate);
+                    fetch("http://localhost:3000/posts",{
+                        method : "POST",
+                        headers:{
+                            "Content-Type":"application/json"
+                        },
+                        body:JSON.stringify(
+                            {
+                                description: this.incomeDes,
+                                value: this.incomeValue,
+                                date: this.incomeDate
+                            }
+                        )
+                    })
+                    .then((response)=>{
+                        return response.json();
+                    })
+                    .then((post)=>{
+                        this.posts.push(post)
+                    })
+                    .catch((err)=>{
+                        console.log(err.message);
+                    })
                 }
         }
+
+    },
+    mounted(){
+        /* fetch data */
+        fetch("http://localhost:3000/posts")
+        .then((response)=>{
+            return response.json();
+        })
+        .then((datas)=>{
+            this.posts = datas;
+        })
+        .catch((err)=>{
+            console.log(err.message);
+        })
     }
 
 }
