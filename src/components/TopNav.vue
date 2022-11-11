@@ -23,7 +23,8 @@ export default {
             incomeDes:'',
             incomeValue: '',
             incomeDate: '',
-            posts:[]
+            posts:[],
+            totalIncome: 0
         }
     },
     methods:{
@@ -32,6 +33,7 @@ export default {
             this.posts = this.posts.filter((post)=>{
                 return post.id != id;
             })
+            this.total;
         },
         /* add income */
         save(e){
@@ -61,12 +63,17 @@ export default {
                         return response.json();
                     })
                     .then((post)=>{
-                        this.posts.push(post)
+                        this.posts.push(post);
+                        this.total;
                     })
                     .catch((err)=>{
                         console.log(err.message);
                     })
                 }
+                this.incomeDate = '';
+                this.incomeDes = '';
+                this.incomeValue = ''
+                
         }
 
     },
@@ -78,11 +85,23 @@ export default {
         })
         .then((datas)=>{
             this.posts = datas;
+            this.total;
         })
         .catch((err)=>{
             console.log(err.message);
         })
+        
+    },
+    /* calculate total income */
+    computed:{
+        total(){
+          this.totalIncome = this.posts.reduce((preValue,curValue)=>{
+            return preValue+curValue.value;
+           },0)
+           this.$emit("showTotal",this.totalIncome)
+        }
     }
+    
 
 }
 </script>
@@ -100,12 +119,12 @@ input{
 .btn{
     margin-left: 2px;
     padding: 5px 10px;
-    border: 1px solid rgb(141, 226, 56);
+    border: 1px solid rgb(187, 194, 90);
     border-radius: 10px;
     background-color: #fff;
 }
 .btn:hover{
-    background-color: rgb(141, 226, 56);
+    background-color: rgb(217, 225, 96);
 }
 .lists{
     background-color: #f5f5f5;

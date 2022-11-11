@@ -2,10 +2,10 @@
   <div>
     <section class="topNav">
       <h2>Income Tracker</h2>
-      <h3>$0</h3>
+      <h3>$ {{total}}</h3>
     </section>
     <div class="container">
-      <TopNav></TopNav>
+      <TopNav @showTotal="total=$event"></TopNav>
     </div>
   </div>
 </template>
@@ -14,6 +14,11 @@
 import TopNav from '../components/TopNav'
 export default {
   components: { TopNav },
+  data(){
+    return{
+      total: 0
+    }
+  }
 
 }
 </script>
